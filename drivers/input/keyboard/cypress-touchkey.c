@@ -731,7 +731,9 @@ static void sec_touchkey_early_suspend(struct early_suspend *h)
     int ret = 0;
     /*signed char int_data[] ={0x80};*/
 #endif    
-    mutex_lock(&touchkey_driver->mutex);
+
+    if (touchkey_enable < 0)
+        return;
 
     touchkey_enable = 0;
     set_touchkey_debug('S');
