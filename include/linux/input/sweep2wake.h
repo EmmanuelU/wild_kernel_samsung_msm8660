@@ -26,4 +26,4 @@
 /* PowerKey setter */
 extern void sweep2wake_setdev(struct input_dev *);
 
-#endif        /* _LINUX_SWEEP2WAKE_H */
+#endif	/* _LINUX_SWEEP2WAKE_H */
