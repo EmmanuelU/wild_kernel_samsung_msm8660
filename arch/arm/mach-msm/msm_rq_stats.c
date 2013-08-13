@@ -262,6 +262,11 @@ out:
 	return NOTIFY_DONE;
 }
 
+static int is_dual_locked = 0;
+static int is_sysfs_used = 0;
+static int is_uevent_sent = 0;
+static int stall_mpdecision = 0;
+
 static ssize_t hotplug_disable_show(struct kobject *kobj,
 		struct kobj_attribute *attr, char *buf)
 {

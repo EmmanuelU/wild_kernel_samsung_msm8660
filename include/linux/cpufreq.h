@@ -348,7 +348,7 @@ enum {
 #ifdef CONFIG_USA_MODEL_SGH_I577
 #define MAX_FREQ_LIMIT		1242000
 #else
-#define MAX_FREQ_LIMIT		1512000
+#define MAX_FREQ_LIMIT		1836000
 #endif
 
 #define MIN_FREQ_LIMIT		96000

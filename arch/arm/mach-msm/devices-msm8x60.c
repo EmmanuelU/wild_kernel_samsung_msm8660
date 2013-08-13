@@ -617,7 +617,11 @@ static struct msm_bus_vectors grp3d_nominal_high_vectors[] = {
 		.src = MSM_BUS_MASTER_GRAPHICS_3D,
 		.dst = MSM_BUS_SLAVE_EBI_CH0,
 		.ab = 0,
+#ifdef CONFIG_KGSL_GPU_CTRL
+		.ib = KGSL_CONVERT_TO_MBPS(2484),
+#else
 		.ib = KGSL_CONVERT_TO_MBPS(2008),
+#endif
 	},
 };
 
@@ -855,12 +859,12 @@ static struct kgsl_device_platform_data kgsl_3d0_pdata = {
 		{
 			.gpu_freq = 200000000,
 			.bus_freq = 2,
-			.io_fraction = 100,
+			.io_fraction = 50,
 		},
 		{
 			.gpu_freq = 177778000,
 			.bus_freq = 1,
-			.io_fraction = 100,
+			.io_fraction = 50,
 		},
 		{
 			.gpu_freq = 27000000,
