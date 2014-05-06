@@ -78,4 +78,12 @@ GTAGS
 
 *.orig
 *~
+<<<<<<< HEAD
+=======
+*.txt
+flashable/zip/
+updater-script
+zImage
+*.zip
+>>>>>>> 4c33cf5... Update Build Script
 \#*#
