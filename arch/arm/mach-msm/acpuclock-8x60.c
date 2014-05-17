@@ -52,9 +52,11 @@
 #define L_VAL_SCPLL_CAL_MAX	0x1C /* = 1512 MHz with 27MHz source */
 #endif
 
-#define MAX_VDD_SC		1250000 /* uV */
-#define MAX_VDD_MEM		1250000 /* uV */
-#define MAX_VDD_DIG		1200000 /* uV */
+
+#define MIN_VDD_SC		600000 /* uV */
+#define MAX_VDD_SC		1350000 /* uV */
+#define MAX_VDD_MEM		1350000 /* uV */
+#define MAX_VDD_DIG		1350000 /* uV */
 #define MAX_AXI			 310500 /* KHz */
 #define SCPLL_LOW_VDD_FMAX	 594000 /* KHz */
 #define SCPLL_LOW_VDD		1000000 /* uV */
@@ -266,9 +268,9 @@ static struct clkctl_acpu_speed acpu_freq_tbl_wild[] = {
   { {0, 0},  MAX_AXI, ACPU_AFAB,  1, 0, 0, 0,    L2(0),   775000, 0x03006000},
   { {1, 1},  384000,  ACPU_PLL_8, 3, 0, 0, 0,    L2(1),   800000, 0x03006000},
   { {1, 1},  432000,  ACPU_SCPLL, 0, 0, 1, 0x08, L2(1),   825000, 0x03006000},
-  { {1, 1},  486000,  ACPU_SCPLL, 0, 0, 1, 0x09, L2(2),   850000, 0x03006000},
+  { {1, 1},  486000,  ACPU_SCPLL, 0, 0, 1, 0x09, L2(2),   825000, 0x03006000},
   { {1, 1},  540000,  ACPU_SCPLL, 0, 0, 1, 0x0A, L2(3),   850000, 0x03006000},
-  { {1, 1},  594000,  ACPU_SCPLL, 0, 0, 1, 0x0B, L2(4),   875000, 0x03006000},
+  { {1, 1},  594000,  ACPU_SCPLL, 0, 0, 1, 0x0B, L2(4),   850000, 0x03006000},
   { {1, 1},  648000,  ACPU_SCPLL, 0, 0, 1, 0x0C, L2(5),   875000, 0x03006000},
   { {1, 1},  702000,  ACPU_SCPLL, 0, 0, 1, 0x0D, L2(6),   900000, 0x03006000},
   { {1, 1},  756000,  ACPU_SCPLL, 0, 0, 1, 0x0E, L2(7),   900000, 0x03006000},
@@ -290,7 +292,7 @@ static struct clkctl_acpu_speed acpu_freq_tbl_wild[] = {
   { {1, 1}, 1620000,  ACPU_SCPLL, 0, 0, 1, 0x1E, L2(20), 1175000, 0x03006000},
   { {1, 1}, 1674000,  ACPU_SCPLL, 0, 0, 1, 0x1F, L2(20), 1175000, 0x03006000},
   { {1, 1}, 1728000,  ACPU_SCPLL, 0, 0, 1, 0x20, L2(20), 1200000, 0x03006000},
-  { {1, 1}, 1782000,  ACPU_SCPLL, 0, 0, 1, 0x21, L2(20), 1225000, 0x03006000},
+  { {1, 1}, 1782000,  ACPU_SCPLL, 0, 0, 1, 0x21, L2(20), 1200000, 0x03006000},
   { {1, 1}, 1836000,  ACPU_SCPLL, 0, 0, 1, 0x22, L2(20), 1250000, 0x03006000},
   { {0, 0}, 0 },
 };
