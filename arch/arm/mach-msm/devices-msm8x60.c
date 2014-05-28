@@ -912,15 +912,31 @@ static struct resource kgsl_2d0_resources[] = {
 static struct kgsl_device_platform_data kgsl_2d0_pdata = {
 	.pwrlevel = {
 #ifdef CONFIG_KGSL_GPU_CTRL
+                {
+                        .gpu_freq = 266667000,
+                        .bus_freq = 5,
+                },
+                {
+                        .gpu_freq = 228571000,
+                        .bus_freq = 4,
+                },
 		{
-			.gpu_freq = 266667000,
+			.gpu_freq = 200000000,
 			.bus_freq = 3,
 		},
 		{
-			.gpu_freq = 228571000,
+			.gpu_freq = 160000000,
 			.bus_freq = 2,
 		},
-#endif
+		{
+			.gpu_freq = 96000000,
+			.bus_freq = 1,
+		},
+		{
+			.gpu_freq = 27000000,
+			.bus_freq = 0,
+		},
+#else
 		{
 			.gpu_freq = 200000000,
 			.bus_freq = 1,
@@ -929,10 +945,11 @@ static struct kgsl_device_platform_data kgsl_2d0_pdata = {
 			.gpu_freq = 200000000,
 			.bus_freq = 0,
 		},
+#endif
 	},
 #ifdef CONFIG_KGSL_GPU_CTRL
 	.init_level = 3,
-	.num_levels = 4,
+	.num_levels = 6,
 	.max_level = 1,
 #else
 	.init_level = 0,
@@ -977,13 +994,29 @@ static struct kgsl_device_platform_data kgsl_2d1_pdata = {
 #ifdef CONFIG_KGSL_GPU_CTRL
                 {
                         .gpu_freq = 266667000,
-                        .bus_freq = 3,
+                        .bus_freq = 5,
                 },
                 {
                         .gpu_freq = 228571000,
-                        .bus_freq = 2,
+                        .bus_freq = 4,
                 },
-#endif
+		{
+			.gpu_freq = 200000000,
+			.bus_freq = 3,
+		},
+		{
+			.gpu_freq = 160000000,
+			.bus_freq = 2,
+		},
+		{
+			.gpu_freq = 96000000,
+			.bus_freq = 1,
+		},
+		{
+			.gpu_freq = 27000000,
+			.bus_freq = 0,
+		},
+#else
                 {
                         .gpu_freq = 200000000,
                         .bus_freq = 1,
@@ -992,10 +1025,11 @@ static struct kgsl_device_platform_data kgsl_2d1_pdata = {
                         .gpu_freq = 200000000,
                         .bus_freq = 0,
                 },
+#endif
 	},
 #ifdef CONFIG_KGSL_GPU_CTRL
 	.init_level = 3,
-	.num_levels = 4,
+	.num_levels = 6,
 	.max_level = 1,
 #else
 	.init_level = 0,
