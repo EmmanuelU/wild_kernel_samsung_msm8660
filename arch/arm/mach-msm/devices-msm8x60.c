@@ -869,6 +869,7 @@ static struct kgsl_device_platform_data kgsl_3d0_pdata = {
 	},
 #ifdef CONFIG_KGSL_GPU_CTRL
 	.init_level = 0,
+	.max_level = 2,
 	.num_levels = 7,
 #else
 	.init_level = 0,
@@ -932,6 +933,7 @@ static struct kgsl_device_platform_data kgsl_2d0_pdata = {
 #ifdef CONFIG_KGSL_GPU_CTRL
 	.init_level = 3,
 	.num_levels = 4,
+	.max_level = 1,
 #else
 	.init_level = 0,
 	.num_levels = 2,
@@ -994,6 +996,7 @@ static struct kgsl_device_platform_data kgsl_2d1_pdata = {
 #ifdef CONFIG_KGSL_GPU_CTRL
 	.init_level = 3,
 	.num_levels = 4,
+	.max_level = 1,
 #else
 	.init_level = 0,
 	.num_levels = 2,
