@@ -4102,17 +4102,19 @@ static void __init msm8x60_init_dsps(void)
 #define MSM_SMI_BASE            0x38000000
 #define MSM_SMI_SIZE            0x4000000
 
-#define MSM_ION_SF_SIZE		0x2A00000 /* 64MB -> 42MB */
-#define MSM_ION_CAMERA_SIZE	0xA00000 /* 18MB -> 10MB */
-#define MSM_ION_MM_FW_SIZE	0x200000 /* 2MB */
-#define MSM_ION_MM_SIZE		0x3300000 /* 54MB -> 51MB */
-#define MSM_ION_MFC_SIZE	0x100000 /* 1MB */
-#define MSM_ION_AUDIO_SIZE	0x4CF000 /* ~5MB */
+#define MSM_RAM_CONSOLE_BASE    0x77800000
+#define MSM_RAM_CONSOLE_SIZE    SZ_1M
+
+#define MSM_ION_SF_SIZE		0x3000000
+#define MSM_ION_CAMERA_SIZE	0x1000000
+#define MSM_ION_MM_FW_SIZE	0x200000
+#define MSM_ION_MM_SIZE		0x3D00000
+#define MSM_ION_MFC_SIZE	0x100000
+#define MSM_ION_AUDIO_SIZE	0x4CF000
 
 #define MSM_ION_MM_FW_BASE	MSM_SMI_BASE
 #define MSM_ION_MM_BASE		0x38200000
-#define MSM_ION_MFC_BASE	0x3B500000
-#define MSM_ION_CAMERA_BASE     0x3B600000
+#define MSM_ION_MFC_BASE	0x3BF00000
 
 #define MSM_ION_HEAP_NUM	7
 
@@ -9752,6 +9754,7 @@ static struct memtype_reserve msm8x60_reserve_table[] __initdata = {
 
 static void reserve_ion_memory(void)
 {
+	msm8x60_reserve_table[MEMTYPE_EBI1].size += MSM_ION_CAMERA_SIZE;
 	msm8x60_reserve_table[MEMTYPE_EBI1].size += MSM_ION_SF_SIZE;
 	msm8x60_reserve_table[MEMTYPE_EBI1].size += MSM_ION_AUDIO_SIZE;
 }
