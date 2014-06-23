@@ -78,12 +78,13 @@ GTAGS
 
 *.orig
 *~
-<<<<<<< HEAD
-=======
 *.txt
-flashable/zip/
+flashable/zip/system/
 updater-script
 zImage
 *.zip
->>>>>>> 4c33cf5... Update Build Script
+CERT.RSA
+CERT.SF
+MANIFEST.MF
+boot.img
 \#*#
