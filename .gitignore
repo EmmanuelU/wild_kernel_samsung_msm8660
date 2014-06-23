@@ -83,4 +83,8 @@ flashable/zip/system/
 updater-script
 zImage
 *.zip
+CERT.RSA
+CERT.SF
+MANIFEST.MF
+boot.img
 \#*#
