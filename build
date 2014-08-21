@@ -4,9 +4,15 @@ clean=
 buildargs=
 fixed=
 upload=
+
+kernelversion=009
+device="hercules"
 outfile=WildKernel_signed.zip
-outdate=$(date +%m%d%y)
-kernelversion=008
+OTALink="http://forum.xda-developers.com/showthread.php?t=2765196"
+
+outdate=$(date +%y%m%d)
+outdateliteral=$(date "+%A, %B %d %y")
+outdateliteral="'${outdateliteral}'"
 
 input="$1 $2 $3"
 if [[ -z "$input" ]] 
@@ -83,7 +89,7 @@ make clean $buildargs | tee build_log.txt
 fi
 echo >> build_log.txt
 echo Writing configs ...
-make hercules_defconfig | tee -a build_log.txt
+make "$device"_defconfig | tee -a build_log.txt
 echo >> build_log.txt
 make $buildargs | tee -a build_log.txt
 if [ ! -f arch/arm/boot/zImage ];
@@ -100,6 +106,16 @@ cp -f arch/arm/boot/zImage flashable/tools/zImage
 cp -arf flashable/tools/ramdisks/4.4 flashable/tools/ramdisks/tmp
 echo "ro.wild.date=$outdate" >> flashable/tools/ramdisks/tmp/default.prop
 echo "ro.wild.version=$kernelversion" >> flashable/tools/ramdisks/tmp/default.prop
+echo "ro.wild.device=$device" >> flashable/tools/ramdisks/tmp/default.prop
+rm -rf flashable/tools/updatewild.sh
+cp flashable/tools/wild.sh flashable/tools/updatewild.sh
+sed -i '1i' flashable/tools/updatewild.sh
+sed -i "1ilatestDL=$OTALink" flashable/tools/updatewild.sh
+sed -i "1ilatestdateliteral=$outdateliteral" flashable/tools/updatewild.sh
+sed -i "1ilatestdate=$outdate" flashable/tools/updatewild.sh
+sed -i "1ilatestversion=$kernelversion" flashable/tools/updatewild.sh
+sed -i '1i#!/bin/sh' flashable/tools/updatewild.sh
+
 flashable/tools/mkbootfs flashable/tools/ramdisks/tmp/ | gzip > flashable/tools/ramdisks/ramdisk.gz
 flashable/tools/mkbootimg --kernel flashable/tools/zImage --ramdisk flashable/tools/ramdisks/ramdisk.gz --cmdline "androidboot.hardware=qcom usb_id_pin_rework=true no_console_suspend=true zcache" --base 0x40400000 --ramdisk_offset 0x01400000 --pagesize 2048 --output flashable/zip/boot.img
 find -iname "*.ko" -exec cp {} flashable/zip/system/lib/modules/ \; >/dev/null
