@@ -7,7 +7,7 @@ dynamic=
 upload=
 
 kernelversion=011
-device="hercules"
+device="skyrocket"
 ramdisk="4.4_new"
 dynamic_ramdisk_override="4.4_override"
 outfile=WildKernel_signed.zip
