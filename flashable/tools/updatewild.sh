@@ -1,7 +1,8 @@
 #!/bin/sh
+#DO NOT EDIT FILE - AUTO GENERATED FOR skyrocket
 latestversion=011-build2
-latestdate=141014
-latestdateliteral='October 14 2014'
+latestdate=141018
+latestdateliteral='October 18 2014'
 latestDL=http://forum.xda-developers.com/showthread.php?t=2765196
 input="$1"
 if [[ -z "$input" ]]
