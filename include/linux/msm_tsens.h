@@ -39,6 +39,11 @@ struct tsens_device {
 };
 
 int32_t tsens_get_temp(struct tsens_device *dev, unsigned long *temp);
+
+#ifdef CONFIG_THERMAL_TSENS8x60 || CONFIG_THERMAL_TSENS8960
 int msm_tsens_early_init(struct tsens_platform_data *pdata);
+#else
+static inline int msm_tsens_early_init(struct tsens_platform_data *pdata) { return 0; }
+#endif
 
 #endif /*MSM_TSENS_H */
