@@ -1,9 +1,9 @@
 #!/bin/sh
 #DO NOT EDIT FILE - AUTO GENERATED FOR skyrocket
-latestversion=011-build2
+latestversion=011-build3
 latestdate=141020
 latestdateliteral='October 20 2014'
-latestDL=http://forum.xda-developers.com/showthread.php?t=2765196
+latestDL=http://forum.xda-developers.com/s2-skyrocket/development/kernel-wildkernel-v011-featurlicous-t2905735
 input="$1"
 if [[ -z "$input" ]]
 	then

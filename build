@@ -6,12 +6,13 @@ fixed=
 dynamic=
 upload=
 
-kernelversion=011-build2
+kernelversion=011-build3
 device="skyrocket"
+defconfig="wild_defconfig"
 ramdisk="4.4_new"
 dynamic_ramdisk_override="4.4_override"
 outfile=WildKernel_signed.zip
-OTALink="http://forum.xda-developers.com/showthread.php?t=2765196"
+OTALink="http://forum.xda-developers.com/s2-skyrocket/development/kernel-wildkernel-v011-featurlicous-t2905735"
 
 outdate=$(date +%y%m%d)
 outdateliteral=$(date "+%B %d %Y")
@@ -113,7 +114,7 @@ make clean $buildargs | tee build_log.txt
 fi
 echo >> build_log.txt
 echo Writing configs ...
-make "$device"_defconfig | tee -a build_log.txt
+make "$defconfig" | tee -a build_log.txt
 echo >> build_log.txt
 make $buildargs | tee -a build_log.txt
 if [ ! -f arch/arm/boot/zImage ];
