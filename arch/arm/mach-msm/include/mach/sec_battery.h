@@ -55,6 +55,9 @@ extern unsigned int get_hw_rev(void);
 extern void tsp_set_unknown_charging_cable(bool);
 #endif
 
-int sec_get_batt_level(void);
+#define SEC_BATT_LOW_PERCENT 40
+#define SEC_BATT_LOW_VOLTAGE 3740000
+
+bool sec_low_power(void);
 
 #endif /* __MACH_SEC_BATTERY_H */
