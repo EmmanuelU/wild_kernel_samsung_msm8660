@@ -189,6 +189,14 @@ static int32_t m5mo_i2c_txdata(unsigned short saddr, char *txdata, int length)
 }
 #endif
 
+static int m5mo_last_flashmsec = 0;
+static bool m5mo_highpower_flash = true;
+static bool m5mo_flash_use_lowpower(void)
+{
+	//Use low power flash if last flash was ~5secs ago
+	return ((m5mo_last_flashmsec > 0 && (jiffies_to_msecs(jiffies) - m5mo_last_flashmsec) <= 5000) || sec_low_power());
+}
+
 static int m5mo_write(unsigned char len, unsigned char category, unsigned char byte, int val)
 {
 	struct i2c_msg msg;
@@ -1372,7 +1380,7 @@ static int m5mo_set_af(int val)
 // touch
 //	CAM_DEBUG("focus.touch = %d   focus.touchaf = %d", m5mo_ctrl->focus.touch,  m5mo_ctrl->focus.touchaf);
 	
-	if (sec_low_power() && req_flash_mode)
+	if (m5mo_flash_use_lowpower() && req_flash_mode)
 		m5mo_set_flash(req_flash_mode);
 
 	if (m5mo_ctrl->focus.touchaf == 1) {
@@ -2169,12 +2177,13 @@ static long m5mo_set_sensor_mode(int mode)
 
 	case SENSOR_SNAPSHOT_MODE:
 		CAM_DEBUG("SENSOR_SNAPSHOT_MODE START");
-		if (sec_low_power() && req_flash_mode) {
+		if (m5mo_flash_use_lowpower() && req_flash_mode) {
 			snapshot_low_pwr = 1;
 			init_completion(&snapshot);
 			schedule_delayed_work(&flash_work, 0);
 			usleep(10 * 1000);
 		}
+		else if(m5mo_highpower_flash) m5mo_last_flashmsec = jiffies_to_msecs(jiffies);
 		m5mo_snapshot_mode();
 		break;
 
@@ -2510,7 +2519,7 @@ int m5mo_sensor_open_init(const struct msm_camera_sensor_info *data)
 
 	cam_err("X");
 init_done:
-	if (sec_low_power())
+	if (m5mo_flash_use_lowpower())
 		m5mo_set_flash(req_flash_mode);
 	return rc;
 
@@ -2721,10 +2730,11 @@ int m5mo_sensor_ext_config(void __user *argp)
 		
 	case EXT_CFG_SET_FLASH:
 		req_flash_mode = cfg_data.value_1;
-		if (!sec_low_power() ||
+		if (!m5mo_flash_use_lowpower() ||
 			(req_flash_mode == M5MO_FLASH_CAPTURE_OFF) ||
 			(req_flash_mode == M5MO_FLASH_MOVIE_ON))
 			rc = m5mo_set_flash(req_flash_mode);
+		m5mo_highpower_flash = !m5mo_flash_use_lowpower();
 		break;
 		
 	case EXT_CFG_SET_SCENE:
