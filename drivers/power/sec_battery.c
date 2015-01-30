@@ -639,10 +639,10 @@ static int sec_bat_read_adc(struct sec_bat_info *info, int channel,
 		int *adc_data, int *adc_physical);
 
 static int batt_level = 100;
+static int batt_voltage = 4000000;
 
-int sec_get_batt_level(void)
-{
-	return batt_level;
+bool sec_low_power(void){
+	return (batt_level <= SEC_BATT_LOW_PERCENT || batt_voltage <= SEC_BATT_LOW_VOLTAGE);
 }
 
 #ifdef ADC_QUEUE_FEATURE
@@ -2445,6 +2445,7 @@ static void sec_bat_update_info(struct sec_bat_info *info)
 	sec_bat_notify_vcell2charger(info);
 
 	batt_level = info->batt_soc;
+	batt_voltage = info->batt_vcell;
 }
 
 int cable_type = 0;

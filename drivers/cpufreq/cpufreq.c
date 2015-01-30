@@ -30,7 +30,7 @@
 #include <linux/mutex.h>
 #include <linux/syscore_ops.h>
 #include <linux/cpugovsync.h>
-#include <linux/retain_cpu_freq.h>
+#include <linux/retain_cpu_policy.h>
 
 #include <trace/events/power.h>
 
@@ -430,7 +430,7 @@ static ssize_t store_##file_name					\
 	ret = __cpufreq_set_policy(policy, &new_policy);		\
 	policy->user_policy.object = policy->object;			\
 									\
-	retain_cpu_freq_policy(&new_policy);					\
+	retain_cpu_policy(&new_policy);					\
 									\
 	return ret ? ret : count;					\
 }
@@ -471,7 +471,7 @@ static ssize_t store_scaling_min_freq
 			}
 		}
 	}
-	retain_cpu_freq_policy(&new_policy);
+	retain_cpu_policy(&new_policy);
 
 	return ret ? ret : count;
 }
@@ -536,7 +536,7 @@ static ssize_t store_scaling_max_freq
 			}
 		}
 	}
-	retain_cpu_freq_policy(&new_policy);
+	retain_cpu_policy(&new_policy);
 
 	return ret ? ret : count;
 }				
@@ -633,7 +633,7 @@ static ssize_t store_scaling_governor(struct cpufreq_policy *policy,
 		kobject_uevent_env(cpufreq_global_kobject, KOBJ_ADD, envp);
 	}
 	#endif
-	retain_cpu_freq_policy(&new_policy);
+	retain_cpu_policy(&new_policy);
 	if (ret) return ret;
 	else return count;
 }
@@ -926,8 +926,9 @@ static int cpufreq_add_dev_policy(unsigned int cpu,
 #ifdef CONFIG_SMP
 	unsigned long flags;
 	unsigned int j;
-/*
+
 #ifdef CONFIG_HOTPLUG_CPU
+	/*
 	struct cpufreq_governor *gov;
 
 	gov = __find_governor(per_cpu(cpufreq_policy_save, cpu).gov);
@@ -946,8 +947,8 @@ static int cpufreq_add_dev_policy(unsigned int cpu,
 	}
 	pr_debug("Restoring CPU%d min %d and max %d\n",
 		cpu, policy->min, policy->max);
+	*/
 #endif
-*/
 	for_each_cpu(j, policy->cpus) {
 		struct cpufreq_policy *managed_policy;
 
@@ -1464,6 +1465,25 @@ unsigned int cpufreq_quick_get(unsigned int cpu)
 }
 EXPORT_SYMBOL(cpufreq_quick_get);
 
+/**
+ * cpufreq_quick_get_max - get the max reported CPU frequency for this CPU
+ * @cpu: CPU number
+ *
+ * Just return the max possible frequency for a given CPU.
+ */
+unsigned int cpufreq_quick_get_max(unsigned int cpu)
+{
+	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+	unsigned int ret_freq = 0;
+
+	if (policy) {
+		ret_freq = policy->max;
+		cpufreq_cpu_put(policy);
+	}
+
+	return ret_freq;
+}
+EXPORT_SYMBOL(cpufreq_quick_get_max);
 
 static unsigned int __cpufreq_get(unsigned int cpu)
 {

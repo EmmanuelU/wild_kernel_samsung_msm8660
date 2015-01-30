@@ -28,8 +28,8 @@ static bool bln_suspended = false;		/* is system suspended */
 static uint32_t blink_count;
 static uint32_t blink_on_msec = 500;
 static uint32_t blink_off_msec = 500;
-static uint32_t override_blink_on_msec = NULL;
-static uint32_t override_blink_off_msec = NULL;
+static uint32_t override_blink_on_msec = 0;
+static uint32_t override_blink_off_msec = 0;
 static uint32_t max_blink_count = 300;
 
 static struct bln_implementation *bln_imp = NULL;
@@ -210,7 +210,7 @@ static ssize_t blink_interval_status_write(struct device *dev,
 
 	c = sscanf(buf, "%u %u\n", &ms_on, &ms_off);
 	if (c == 1 || c == 2) {
-		if(override_blink_on_msec != NULL && override_blink_off_msec != NULL){
+		if(override_blink_on_msec && override_blink_off_msec){
 			blink_on_msec = override_blink_on_msec;
 			blink_off_msec = (c == 2) ? override_blink_off_msec : blink_on_msec;
 		} else {
@@ -241,8 +241,8 @@ static ssize_t override_blink_interval_status_write(struct device *dev,
 		override_blink_on_msec = ms_on;
 		override_blink_off_msec = ms_off;
 	} else {
-		override_blink_on_msec = NULL;
-		override_blink_off_msec = NULL;
+		override_blink_on_msec = 0;
+		override_blink_off_msec = 0;
 	}
 
 	return size;
