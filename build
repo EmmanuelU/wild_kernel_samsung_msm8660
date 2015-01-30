@@ -6,7 +6,7 @@ fixed=
 dynamic=
 upload=
 
-kernelversion=012
+kernelversion=013
 device="skyrocket"
 defconfig="wild_defconfig"
 ramdisk="4.4_new"
