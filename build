@@ -8,9 +8,10 @@ upload=
 
 kernelversion=012
 device="hercules"
-defconfig="wild_defconfig"
-ramdisk="4.4_new"
-dynamic_ramdisk_override="4.4_override"
+defconfig="wild_hercules_defconfig"
+ramdisk="5.0"
+pushdir="/external_sd/"
+dynamic_ramdisk_override="5.0_override"
 outfile=WildKernel_signed.zip
 OTALink="http://forum.xda-developers.com/showthread.php?t=2765196"
 
@@ -172,7 +173,7 @@ rm -rf flashable/zip/tools/ramdisk_override
 java -jar flashable/tools/signapk.jar flashable/tools/testkey.x509.pem flashable/tools/testkey.pk8 tmp-kernel.zip $outfile
 rm -rf tmp-kernel.zip
 if [[ "$upload" == "true" ]]; then
-adb push $outfile /sdcard/
+adb push $outfile $pushdir
 fi
 echo
 echo Done - Your File is $outfile
