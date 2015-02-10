@@ -299,8 +299,6 @@ void cpufreq_notify_transition(struct cpufreq_freqs *freqs, unsigned int state)
 }
 EXPORT_SYMBOL_GPL(cpufreq_notify_transition);
 
-
-
 /*********************************************************************
  *                          SYSFS INTERFACE                          *
  *********************************************************************/
