@@ -4,6 +4,7 @@
  * Enhanced Backlight Notifications (EBLN)
  *
  * Copyright (C) 2015, Sultanxda <sultanxda@gmail.com>
+ * Copyright (C) 2015, Emmanuel Utomi <emmanuelutomi@gmail.com>
  * Rewrote driver and core logic from scratch
  *
  * Based on the original BLN implementation by:
@@ -56,12 +57,16 @@ static struct ebln_config {
 	unsigned int blink_timeout_ms;
 	unsigned int off_ms;
 	unsigned int on_ms;
+	unsigned int override_off_ms;
+	unsigned int override_on_ms;
 } ebln_conf = {
 	.always_on = false,
 	.blink_control = 0,
 	.blink_timeout_ms = 600000,
 	.off_ms = 0,
 	.on_ms = 0,
+	.override_off_ms = 0,
+	.override_on_ms = 0,
 };
 
 static struct ebln_implementation *ebln_imp = NULL;
@@ -118,11 +123,11 @@ static void ebln_main(struct work_struct *work)
 				wake_unlock(&ebln_wake_lock);
 				return;
 			}
-			blink_ms = ebln_conf.off_ms;
+			blink_ms = ((ebln_conf.override_on_ms && ebln_conf.override_off_ms) ? ebln_conf.override_off_ms : ebln_conf.off_ms);
 			ebln_imp->led_off(EBLN_BLINK_OFF);
 		} else {
 			blink_callback = true;
-			blink_ms = ebln_conf.on_ms;
+			blink_ms = ((ebln_conf.override_on_ms && ebln_conf.override_off_ms) ? ebln_conf.override_on_ms : ebln_conf.on_ms);
 			ebln_imp->led_on();
 		}
 
@@ -225,12 +230,46 @@ static ssize_t blink_timeout_ms_read(struct device *dev,
 	return sprintf(buf, "%u\n", ebln_conf.blink_timeout_ms);
 }
 
+static ssize_t override_blink_interval_ms_read(struct device *dev,
+		struct device_attribute *attr, char *buf)
+{
+	return sprintf(buf,"%u %u\n", ebln_conf.override_on_ms, ebln_conf.override_off_ms);
+}
+
+static ssize_t override_blink_interval_ms_write(struct device *dev,
+		struct device_attribute *attr, const char *buf, size_t size)
+{
+	unsigned int on_ms, off_ms;
+
+	int ret = sscanf(buf, "%u %u\n", &on_ms, &off_ms);
+	if ((ret == 1 || ret == 2) && on_ms && off_ms) {
+		ebln_conf.override_on_ms = on_ms;
+		ebln_conf.override_off_ms = off_ms;
+	} else {
+		ebln_conf.override_on_ms = 0;
+		ebln_conf.override_off_ms = 0;
+	}
+
+	/* break out of always-on mode */
+	if (ebln_conf.always_on && (ebln_conf.override_off_ms || ebln_conf.override_on_ms > 1)) {
+		cancel_delayed_work_sync(&ebln_main_work);
+		wake_lock(&ebln_wake_lock);
+		ebln_conf.always_on = false;
+		schedule_delayed_work(&ebln_main_work, 0);
+	}
+
+	return size;
+}
+
 static DEVICE_ATTR(blink_control, S_IRUGO | S_IWUGO,
 		NULL,
 		blink_control_write);
 static DEVICE_ATTR(blink_interval_ms, S_IRUGO | S_IWUGO,
 		NULL,
 		blink_interval_ms_write);
+static DEVICE_ATTR(blink_override_interval_ms, S_IRUGO | S_IWUGO,
+		override_blink_interval_ms_read,
+		override_blink_interval_ms_write);
 static DEVICE_ATTR(blink_timeout_ms, S_IRUGO | S_IWUGO,
 		blink_timeout_ms_read,
 		blink_timeout_ms_write);
@@ -238,6 +277,7 @@ static DEVICE_ATTR(blink_timeout_ms, S_IRUGO | S_IWUGO,
 static struct attribute *ebln_attributes[] = {
 	&dev_attr_blink_control.attr,
 	&dev_attr_blink_interval_ms.attr,
+	&dev_attr_blink_override_interval_ms.attr,
 	&dev_attr_blink_timeout_ms.attr,
 	NULL
 };
