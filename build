@@ -6,7 +6,7 @@ fixed=
 dynamic=
 upload=
 
-kernelversion=012
+kernelversion=14-LP
 device="hercules"
 defconfig="wild_hercules_defconfig"
 ramdisk="5.0"
