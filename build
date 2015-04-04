@@ -8,9 +8,9 @@ upload=
 
 kernelversion=14-LP
 device="hercules"
-defconfig="wild_hercules_defconfig"
+defconfig="wild_defconfig"
 ramdisk="5.0"
-pushdir="/external_sd/"
+pushdir="/sdcard/"
 dynamic_ramdisk_override="5.0_override"
 outfile=WildKernel_signed.zip
 OTALink="http://forum.xda-developers.com/showthread.php?t=2765196"
